@@ -14,3 +14,10 @@ with a prescribed Dirichlet boundary condition.
 The script wave_eqn can be run to observe the convergence properties of a FC-based solver, using an
 AB4 scheme in time and the FC-based differentiation in space, for the case of a 1D second order wave equation
 with the possibility to prescribe either Dirichlet or Neumann boundary conditions at each domain boundary.
+
+
+Ref : 
+[1] Amlani, F., & Bruno, O. P. (2016). An FC-based spectral solver for elastodynamic problems in general 
+    three-dimensional domains.  Journal of Computational Physics, 307, 333-354.
+    
+Special thanks to Thomas Andersen and Jagabandhu Paul.
