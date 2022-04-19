@@ -1,7 +1,5 @@
 
-% A routine used to build save the matrices necessary for the
-% generation of the Fourier Continuation.
-
+% A routine used to generate and save the matrices necessary for 
 function generate_bdry_continuations(d, C, E, Z, n_ovr, num_digits)
 
 tic;

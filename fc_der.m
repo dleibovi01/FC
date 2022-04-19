@@ -1,49 +1,32 @@
-function [fx_der, fx_der_coeffs, fx_der_cont] = fc_der(fx, der_order, filter, prd, k, d, C)
 
-% FC_DER - Routine to compute the derivative of a function using Fourier
+% fc_der - Routine to compute the derivative of a function using Fourier
 % continuation.
-%   [fx_der fx_der_coeffs] = fc_der(fx, der_order, prd, k, d, C)
-%   returns the derivative (fx_der) and its coefficients (fx_der_coeffs) of
-%   the function f, given its values fx on an equispaced grid
 %
-%   Inputs:
-%       f_x - value of the function f at the nodes x_j (real n-vector)
-%       der_order - the order of the derivative desired (integer array)
-%       prd - structure containing parameters of the domain, including the
-%       k - wavenumber vector
-%       d - number of FC matching points
-%       C - number of FC continuation points
+% Inputs:
+%   fx : (real) values of the functions f at nodes x_i
+%   der_coeffs : complex vector 2*1i*pi/prd * k
+%   filter : real vector containing the spectral filtering coefficients
+%   d : number of Gram interpolation points
+%   C : number of continuation points
+%   AQ_r: matrix product (A * Q) used to obtain the continuation from the
+%   last d nodes
+%   FAQ_lF: matrix product (A * Q) used to obtain the continuation from the
+%   first d nodes
+%   BC: 2x2 matrix specifying the type of boundary condition at each
+%   interval end (Dirichlet or Neumann), and the associated boundary value
+%   for a Neumann boundary condition
+%   h : grid size
 %
-%   Outputs:
-%       fx_der - the (der_order)^th derivative of the function computed at
-%       the grid points x_j  (real, n-vector)
-%       fx_der_coeffs - the (continuation) Fourier coefficients of the
-%       derivative (complex, n+C length vector, where n = length(x_j))
-%
-%   Author(s):
-%       Thomas G. Anderson
-%       Email: tanderson@caltech.edu
-%
+% Output:
+%   fx_der : Real vector of the same size as fx, containing the values of
+%   the spatial derivative of f at nodes x_i computed with the FC procedure
 
-% Compute the Fourier continuation coefficients (fx_cont_coeffs) of the
-% function from its grid point values (fx) using the FC(Gram) method.
-[fx_cont_coeffs f_dp] = fcont_gram_blend(fx, d, C);
-fourPts = length(fx) + C;
+function fx_der = fc_der(fx, der_coeffs, filter, d, C, AQ_r, FAQ_lF, BC, h)
+
+fc_coeffs = fcont_gram_blend(fx, d, C, AQ_r, FAQ_lF, BC, h);
 n = length(fx);
-if (filter ~= 0)
-    fx_cont_coeffs = fx_cont_coeffs .* specFilter(2*k/fourPts);
-end
-
-% Compute the coefficients of the (der_order)^th derivative of the function
-fx_der_coeffs = zeros(length(der_order), fourPts);
-fx_der_cont = zeros(fourPts, 1);
-fx_der = zeros(n, length(der_order));
-for i=1:length(der_order)
-    fx_der_coeffs(i,:) = fx_cont_coeffs.*(2*pi*1j*k/prd).^der_order(i);
-
-    % Compute the (der_order)^th derivative of the function in physical-space
-    fx_der_cont = fourPts*real(ifft(fx_der_coeffs(i,:)));
-    fx_der(:, i) = fx_der_cont(1:n);
-end
+fourPts = n + C;
+fx_der = real(ifft(fc_coeffs .* filter .* der_coeffs))*fourPts;
+fx_der = fx_der(1 : n);
 
 return

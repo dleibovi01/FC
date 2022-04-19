@@ -1,3 +1,14 @@
+
+% A Modified Gram-Schmidt routine to compute the QR decomposition.
+%
+% Input
+%   A : m x n sized matrix
+%   
+% Outputs:
+%   Q : m x n matrix of the QR decomposition of A
+%   R : n x n matrix of the QR decomposition of A
+%
+
 function [Q, R] = mgs(A)
 m = size(A,1);
 n = size(A,2);
