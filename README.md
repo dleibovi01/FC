@@ -5,7 +5,7 @@ This repository contains routines and scripts associated to the Fourier Continua
 The FC_Data folder contains the Fourier Continuation matrices mentionned in equations (26) and (27) in [1],
 which are used to generate the smooth periodic continuations.
 
-The fuunctions in generate_bdry_continuations.m and precomp_fc_data.m are used to generate these matrices.
+The functions in generate_bdry_continuations.m and precomp_fc_data.m are used to generate these matrices.
 
 The script advection_eqn can be run to observe the convergence properties of a FC-based solver, using a
 RK4 scheme in time and the FC-based differentiation in space, for the case of a 1D Linear advection equation
