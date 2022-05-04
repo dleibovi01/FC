@@ -9,6 +9,9 @@ x = linspace(x_a, x_b, n).';
 
 d =  5; % Number of Gram polynomial interpolation points
 C = 25; % Number of continuation points
+E = C;
+Z = 12;
+
 
 fourPts = n + C; % Number of points in the extended grid
 prd = fourPts*h; % Extended period
